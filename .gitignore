@@ -1,0 +1,112 @@
+# Dependencies
+/node_modules
+/.pnp
+.pnp.js
+/financial-qa-frontend/node_modules
+
+# Testing
+/coverage
+
+# Next.js
+/.next/
+/out/
+/financial-qa-frontend/.next/
+/financial-qa-frontend/out/
+
+# Production
+/build
+/financial-qa-frontend/build
+
+# Misc
+.DS_Store
+*.pem
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+/financial-qa-frontend/.env.local
+/financial-qa-frontend/.env.development.local
+/financial-qa-frontend/.env.test.local
+/financial-qa-frontend/.env.production.local
+
+# Debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Local env files
+.env*.local
+
+# Vercel
+.vercel
+
+# Typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# Firebase
+firebase-debug.log
+firebase-debug.*.log
+.firebase/
+firebase-export-*
+
+# IDE specific files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Python backend
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+venv/
+ENV/
+env/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msm
+*.msp
+*.lnk
