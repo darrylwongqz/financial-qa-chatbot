@@ -106,10 +106,6 @@ venv.bak/
 *.swp
 *.swo
 
-# Project specific
-app/data/*.json
-!app/data/sample.json
-
 # Security and credentials
 service_key.json
 **/service_key.json
