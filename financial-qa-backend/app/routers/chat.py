@@ -32,7 +32,6 @@ async def post_chat_message(
                                       example={
                                           "question": "What was the percentage change in the net cash from operating activities from 2008-2009?",
                                           "model": "gpt-4",
-                                          "conversation_id": None,
                                           "temperature": 0.7,
                                           "max_tokens": 1000,
                                           "retrieval_profile": "balanced"

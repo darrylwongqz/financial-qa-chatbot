@@ -1,30 +1,606 @@
 import React from 'react';
+import resultsData from '../../../evaluation-results/results.json';
+
+// Define types for the evaluation data
+type QuestionTypeMetrics = {
+  total: number;
+  error_or_no_context: {
+    count: number;
+    percentage: number;
+  };
+  successful: {
+    count: number;
+    has_calculation_steps?: number;
+  };
+};
+
+type MetricAverage = {
+  total: number;
+  count: number;
+  average: number;
+};
+
+type EvaluationResult = {
+  id: string;
+  status: string;
+  retrieval_profile: 'fast' | 'balanced' | 'accurate';
+  model: 'gpt-3.5-turbo' | 'gpt-4';
+  created_at: string;
+  updated_at: string;
+  user_id: string;
+  metrics: {
+    total_count: number;
+    error_count: number;
+    error_rate: number;
+    question_type_counts: {
+      extraction: QuestionTypeMetrics;
+      other: QuestionTypeMetrics;
+      calculation: QuestionTypeMetrics;
+      [key: string]: QuestionTypeMetrics; // Index signature for dynamic access
+    };
+    non_error_metrics: {
+      total_count: number;
+      numerical_accuracy: MetricAverage;
+      financial_accuracy: MetricAverage;
+      answer_relevance: MetricAverage;
+      partial_numerical_match: MetricAverage;
+      has_citations: MetricAverage;
+      has_calculation_steps: MetricAverage;
+    };
+  };
+};
+
+// Helper function to format percentages
+const formatPercentage = (value: number) => {
+  return `${(value * 100).toFixed(1)}%`;
+};
+
+// Type assertion for the imported data
+const typedResultsData = resultsData as EvaluationResult[];
 
 function DashboardPage() {
   return (
     <div className="container mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-6">Dashboard</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {/* Stats Card */}
-        <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-lg font-semibold mb-2">Chat Statistics</h2>
-          <p className="text-3xl font-bold text-indigo-600">0</p>
-          <p className="text-sm text-gray-500">Total conversations</p>
+      {/* Evaluation Banner */}
+      <div className="bg-indigo-50 border-l-4 border-indigo-500 p-4 mb-6 rounded-md">
+        <div className="flex">
+          <div className="flex-shrink-0">
+            <svg
+              className="h-5 w-5 text-indigo-500"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fillRule="evenodd"
+                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </div>
+          <div className="ml-3">
+            <p className="text-sm text-indigo-700">
+              This dashboard presents the evaluation results for our Financial
+              QA Chatbot. The data shows performance metrics across different
+              models and retrieval profiles.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <h1 className="text-3xl font-bold mb-2">
+        Financial QA Chatbot Evaluation
+      </h1>
+      <p className="text-gray-600 mb-6">
+        Comprehensive performance analysis across different configurations
+      </p>
+
+      {/* Summary Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="bg-white rounded-lg shadow p-6 border-l-4 border-green-500">
+          <h2 className="text-lg font-semibold mb-2">Best Configuration</h2>
+          <p className="text-2xl font-bold text-green-600">GPT-4 + Accurate</p>
+          <p className="text-sm text-gray-500">
+            Highest accuracy:{' '}
+            {formatPercentage(
+              typedResultsData[5].metrics.non_error_metrics.numerical_accuracy
+                .average
+            )}
+          </p>
+          <p className="text-sm text-gray-500">
+            Error rate:{' '}
+            {formatPercentage(typedResultsData[5].metrics.error_rate)}
+          </p>
         </div>
 
-        {/* Recent Activity Card */}
-        <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-lg font-semibold mb-2">Recent Activity</h2>
-          <p className="text-gray-600">No recent activity</p>
+        <div className="bg-white rounded-lg shadow p-6 border-l-4 border-blue-500">
+          <h2 className="text-lg font-semibold mb-2">Recommended Default</h2>
+          <p className="text-2xl font-bold text-blue-600">GPT-4 + Balanced</p>
+          <p className="text-sm text-gray-500">
+            Good accuracy:{' '}
+            {formatPercentage(
+              typedResultsData[4].metrics.non_error_metrics.numerical_accuracy
+                .average
+            )}
+          </p>
+          <p className="text-sm text-gray-500">
+            Error rate:{' '}
+            {formatPercentage(typedResultsData[4].metrics.error_rate)}
+          </p>
         </div>
 
-        {/* Settings Card */}
-        <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-lg font-semibold mb-2">Settings</h2>
-          <p className="text-gray-600 mb-4">Configure your preferences</p>
-          <button className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition-colors">
-            Manage Settings
-          </button>
+        <div className="bg-white rounded-lg shadow p-6 border-l-4 border-amber-500">
+          <h2 className="text-lg font-semibold mb-2">Budget Option</h2>
+          <p className="text-2xl font-bold text-amber-600">
+            GPT-3.5 + Accurate
+          </p>
+          <p className="text-sm text-gray-500">
+            Decent accuracy:{' '}
+            {formatPercentage(
+              typedResultsData[2].metrics.non_error_metrics.numerical_accuracy
+                .average
+            )}
+          </p>
+          <p className="text-sm text-gray-500">
+            Error rate:{' '}
+            {formatPercentage(typedResultsData[2].metrics.error_rate)}
+          </p>
+        </div>
+      </div>
+
+      {/* Detailed Results Table */}
+      <div className="bg-white rounded-lg shadow mb-8">
+        <div className="px-6 py-4 border-b">
+          <h2 className="text-xl font-semibold">Evaluation Results</h2>
+          <p className="text-sm text-gray-500">
+            Comparison across models and retrieval profiles
+          </p>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Configuration
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Error Rate
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Numerical Accuracy
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Financial Accuracy
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Answer Relevance
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Calculation Steps
+                </th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {typedResultsData.map((result, index) => (
+                <tr
+                  key={index}
+                  className={index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}
+                >
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="font-medium text-gray-900">
+                      {result.model}
+                    </div>
+                    <div className="text-sm text-gray-500">
+                      {result.retrieval_profile}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span
+                      className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                        result.metrics.error_rate < 0.1
+                          ? 'bg-green-100 text-green-800'
+                          : result.metrics.error_rate < 0.2
+                          ? 'bg-yellow-100 text-yellow-800'
+                          : 'bg-red-100 text-red-800'
+                      }`}
+                    >
+                      {formatPercentage(result.metrics.error_rate)}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {formatPercentage(
+                      result.metrics.non_error_metrics.numerical_accuracy
+                        .average
+                    )}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {formatPercentage(
+                      result.metrics.non_error_metrics.financial_accuracy
+                        .average
+                    )}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {formatPercentage(
+                      result.metrics.non_error_metrics.answer_relevance.average
+                    )}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {
+                      result.metrics.question_type_counts.calculation.successful
+                        .has_calculation_steps
+                    }{' '}
+                    /
+                    {
+                      result.metrics.question_type_counts.calculation.successful
+                        .count
+                    }
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Question Type Analysis */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        {['extraction', 'calculation', 'other'].map((type) => (
+          <div key={type} className="bg-white rounded-lg shadow p-6">
+            <h2 className="text-lg font-semibold mb-2 capitalize">
+              {type} Questions
+            </h2>
+            <div className="space-y-4">
+              {typedResultsData
+                .filter((_, i) => i % 3 === 0)
+                .map((result, index) => (
+                  <div
+                    key={index}
+                    className="flex justify-between items-center"
+                  >
+                    <span className="text-sm">
+                      {result.model} ({result.retrieval_profile})
+                    </span>
+                    <div className="flex items-center">
+                      <div className="w-32 bg-gray-200 rounded-full h-2.5">
+                        <div
+                          className={`h-2.5 rounded-full ${
+                            type === 'extraction'
+                              ? 'bg-blue-600'
+                              : type === 'calculation'
+                              ? 'bg-purple-600'
+                              : 'bg-amber-600'
+                          }`}
+                          style={{
+                            width: `${
+                              (1 -
+                                result.metrics.question_type_counts[type]
+                                  .error_or_no_context.percentage) *
+                              100
+                            }%`,
+                          }}
+                        ></div>
+                      </div>
+                      <span className="ml-2 text-xs text-gray-600">
+                        {formatPercentage(
+                          1 -
+                            result.metrics.question_type_counts[type]
+                              .error_or_no_context.percentage
+                        )}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+            </div>
+            <p className="text-xs text-gray-500 mt-4">
+              Success rate for {type} questions across configurations
+            </p>
+          </div>
+        ))}
+      </div>
+
+      {/* Visual Comparison Chart */}
+      <div className="bg-white rounded-lg shadow mb-8">
+        <div className="px-6 py-4 border-b">
+          <h2 className="text-xl font-semibold">Performance Comparison</h2>
+          <p className="text-sm text-gray-500">
+            Visual comparison of key metrics across configurations
+          </p>
+        </div>
+        <div className="p-6">
+          <div className="space-y-8">
+            {/* Numerical Accuracy Chart */}
+            <div>
+              <h3 className="text-sm font-medium text-gray-500 mb-3">
+                Numerical Accuracy
+              </h3>
+              <div className="space-y-4">
+                {typedResultsData.map((result, index) => (
+                  <div key={index} className="flex items-center">
+                    <div className="w-32 text-sm text-right pr-4">
+                      <span className="font-medium">{result.model}</span>
+                      <span className="text-xs text-gray-500 block">
+                        {result.retrieval_profile}
+                      </span>
+                    </div>
+                    <div className="flex-1">
+                      <div className="w-full bg-gray-200 rounded-full h-4">
+                        <div
+                          className={`h-4 rounded-full ${
+                            result.model === 'gpt-4'
+                              ? 'bg-indigo-600'
+                              : 'bg-amber-500'
+                          }`}
+                          style={{
+                            width: `${
+                              result.metrics.non_error_metrics
+                                .numerical_accuracy.average * 100
+                            }%`,
+                          }}
+                        ></div>
+                      </div>
+                    </div>
+                    <div className="w-16 text-sm font-medium text-gray-900 pl-4">
+                      {formatPercentage(
+                        result.metrics.non_error_metrics.numerical_accuracy
+                          .average
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Error Rate Chart */}
+            <div>
+              <h3 className="text-sm font-medium text-gray-500 mb-3">
+                Error Rate (lower is better)
+              </h3>
+              <div className="space-y-4">
+                {typedResultsData.map((result, index) => (
+                  <div key={index} className="flex items-center">
+                    <div className="w-32 text-sm text-right pr-4">
+                      <span className="font-medium">{result.model}</span>
+                      <span className="text-xs text-gray-500 block">
+                        {result.retrieval_profile}
+                      </span>
+                    </div>
+                    <div className="flex-1">
+                      <div className="w-full bg-gray-200 rounded-full h-4">
+                        <div
+                          className={`h-4 rounded-full ${
+                            result.metrics.error_rate < 0.1
+                              ? 'bg-green-500'
+                              : result.metrics.error_rate < 0.2
+                              ? 'bg-yellow-500'
+                              : 'bg-red-500'
+                          }`}
+                          style={{
+                            width: `${result.metrics.error_rate * 100}%`,
+                          }}
+                        ></div>
+                      </div>
+                    </div>
+                    <div className="w-16 text-sm font-medium text-gray-900 pl-4">
+                      {formatPercentage(result.metrics.error_rate)}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Key Findings */}
+      <div className="bg-white rounded-lg shadow mb-8">
+        <div className="px-6 py-4 border-b">
+          <h2 className="text-xl font-semibold">Key Findings</h2>
+        </div>
+        <div className="p-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <h3 className="font-semibold text-lg mb-3">Model Comparison</h3>
+              <ul className="list-disc pl-5 space-y-2 text-sm">
+                <li>
+                  GPT-4 consistently outperforms GPT-3.5-turbo across all
+                  metrics
+                </li>
+                <li>
+                  GPT-4 with accurate retrieval achieves 80% numerical accuracy
+                  vs 72% for GPT-3.5-turbo
+                </li>
+                <li>
+                  GPT-4 delivers more relevant answers (82% relevance with
+                  accurate retrieval)
+                </li>
+                <li>
+                  GPT-4 demonstrates superior performance on calculation
+                  questions
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="font-semibold text-lg mb-3">
+                Retrieval Profile Impact
+              </h3>
+              <ul className="list-disc pl-5 space-y-2 text-sm">
+                <li>
+                  <strong>Accurate:</strong> Lowest error rates, highest
+                  accuracy, but slowest responses
+                </li>
+                <li>
+                  <strong>Balanced:</strong> Good compromise between speed and
+                  accuracy, recommended default
+                </li>
+                <li>
+                  <strong>Fast:</strong> Highest error rates, lowest accuracy,
+                  but fastest responses
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Recommendations */}
+      <div className="bg-white rounded-lg shadow">
+        <div className="px-6 py-4 border-b">
+          <h2 className="text-xl font-semibold">Recommendations</h2>
+        </div>
+        <div className="p-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="bg-green-50 p-4 rounded-lg border border-green-200">
+              <h3 className="font-semibold text-green-800 mb-2">
+                High-Precision Applications
+              </h3>
+              <p className="text-sm text-green-700 mb-2">
+                <strong>Model:</strong> GPT-4
+              </p>
+              <p className="text-sm text-green-700 mb-2">
+                <strong>Retrieval:</strong> Accurate
+              </p>
+              <p className="text-sm text-green-700">
+                Delivers the highest numerical and financial accuracy, minimal
+                error rate, and strong calculation transparency.
+              </p>
+            </div>
+            <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+              <h3 className="font-semibold text-blue-800 mb-2">
+                Most Use Cases (Recommended)
+              </h3>
+              <p className="text-sm text-blue-700 mb-2">
+                <strong>Model:</strong> GPT-4
+              </p>
+              <p className="text-sm text-blue-700 mb-2">
+                <strong>Retrieval:</strong> Balanced
+              </p>
+              <p className="text-sm text-blue-700">
+                Offers performance metrics surprisingly close to accurate
+                retrieval while providing significantly faster response times.
+              </p>
+            </div>
+            <div className="bg-amber-50 p-4 rounded-lg border border-amber-200">
+              <h3 className="font-semibold text-amber-800 mb-2">
+                Speed-Critical Applications
+              </h3>
+              <p className="text-sm text-amber-700 mb-2">
+                <strong>Model:</strong> GPT-3.5-turbo
+              </p>
+              <p className="text-sm text-amber-700 mb-2">
+                <strong>Retrieval:</strong> Fast
+              </p>
+              <p className="text-sm text-amber-700">
+                Although error rates are higher, it provides faster response
+                times for real-time applications.
+              </p>
+            </div>
+            <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
+              <h3 className="font-semibold text-purple-800 mb-2">
+                Budget-Constrained Scenarios
+              </h3>
+              <p className="text-sm text-purple-700 mb-2">
+                <strong>Model:</strong> GPT-3.5-turbo
+              </p>
+              <p className="text-sm text-purple-700 mb-2">
+                <strong>Retrieval:</strong> Accurate
+              </p>
+              <p className="text-sm text-purple-700">
+                Prioritizes high-quality retrieval over model size when cost is
+                a factor.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Methodology Section */}
+      <div className="mt-8 bg-white rounded-lg shadow">
+        <div className="px-6 py-4 border-b">
+          <h2 className="text-xl font-semibold">Evaluation Methodology</h2>
+        </div>
+        <div className="p-6">
+          <p className="text-sm text-gray-600 mb-4">
+            Our evaluation framework assesses the chatbot using the following
+            key metrics:
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="border rounded p-3">
+              <h3 className="font-medium text-gray-900">Error Rate</h3>
+              <p className="text-xs text-gray-600">
+                Percentage of questions where the model failed to provide a
+                relevant answer or encountered context retrieval issues.
+              </p>
+            </div>
+            <div className="border rounded p-3">
+              <h3 className="font-medium text-gray-900">Numerical Accuracy</h3>
+              <p className="text-xs text-gray-600">
+                Binary measure indicating whether numerical values match the
+                ground truth within a tolerance of 1%.
+              </p>
+            </div>
+            <div className="border rounded p-3">
+              <h3 className="font-medium text-gray-900">Financial Accuracy</h3>
+              <p className="text-xs text-gray-600">
+                Similar to numerical accuracy but with a stricter tolerance for
+                financial figures.
+              </p>
+            </div>
+            <div className="border rounded p-3">
+              <h3 className="font-medium text-gray-900">Answer Relevance</h3>
+              <p className="text-xs text-gray-600">
+                A score (0.0–1.0) that gauges how relevant the answer is to the
+                question.
+              </p>
+            </div>
+            <div className="border rounded p-3">
+              <h3 className="font-medium text-gray-900">Has Citations</h3>
+              <p className="text-xs text-gray-600">
+                Binary indicator showing whether the answer includes proper
+                citations to sources.
+              </p>
+            </div>
+            <div className="border rounded p-3">
+              <h3 className="font-medium text-gray-900">
+                Has Calculation Steps
+              </h3>
+              <p className="text-xs text-gray-600">
+                For calculation questions, shows whether the model provides its
+                calculation steps.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Conclusion Section */}
+      <div className="mt-8 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-lg shadow text-white">
+        <div className="p-6">
+          <h2 className="text-xl font-semibold mb-4">Conclusion</h2>
+          <p className="mb-6">
+            Our Financial QA chatbot demonstrates robust performance across
+            various configurations. GPT-4, paired with accurate retrieval,
+            delivers the best results in terms of numerical precision,
+            relevance, and calculation transparency. For most use cases, we
+            recommend the balanced retrieval profile with GPT-4, which offers
+            performance metrics surprisingly close to accurate retrieval while
+            providing significantly faster response times.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4">
+            <a
+              href="/chat"
+              className="inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-indigo-600 bg-white hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            >
+              Try the Chatbot
+            </a>
+            <a
+              href="https://github.com/yourusername/financial-qa-chatbot"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-700 bg-opacity-60 hover:bg-opacity-70 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            >
+              View Source Code
+            </a>
+          </div>
         </div>
       </div>
     </div>
