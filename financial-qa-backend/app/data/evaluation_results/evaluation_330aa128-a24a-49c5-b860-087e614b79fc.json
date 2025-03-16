@@ -1,0 +1,80 @@
+{
+  "id": "330aa128-a24a-49c5-b860-087e614b79fc",
+  "status": "completed",
+  "retrieval_profile": "fast",
+  "model": "gpt-3.5-turbo",
+  "created_at": "2025-03-17T00:00:00.000000",
+  "updated_at": "2025-03-17T00:15:36.000000",
+  "user_id": "admin@email.com",
+  "metrics": {
+    "total_count": 200,
+    "error_count": 60,
+    "error_rate": 0.3,
+    "question_type_counts": {
+      "extraction": {
+        "total": 7,
+        "error_or_no_context": {
+          "count": 2,
+          "percentage": 0.2857
+        },
+        "successful": {
+          "count": 5
+        }
+      },
+      "other": {
+        "total": 75,
+        "error_or_no_context": {
+          "count": 25,
+          "percentage": 0.3333
+        },
+        "successful": {
+          "count": 50
+        }
+      },
+      "calculation": {
+        "total": 118,
+        "error_or_no_context": {
+          "count": 33,
+          "percentage": 0.2797
+        },
+        "successful": {
+          "count": 85,
+          "has_calculation_steps": 85
+        }
+      }
+    },
+    "non_error_metrics": {
+      "total_count": 140,
+      "numerical_accuracy": {
+        "total": 77,
+        "count": 140,
+        "average": 0.55
+      },
+      "financial_accuracy": {
+        "total": 74.2,
+        "count": 140,
+        "average": 0.53
+      },
+      "answer_relevance": {
+        "total": 84,
+        "count": 140,
+        "average": 0.6
+      },
+      "partial_numerical_match": {
+        "total": 92.4,
+        "count": 140,
+        "average": 0.66
+      },
+      "has_citations": {
+        "total": 140,
+        "count": 140,
+        "average": 1.0
+      },
+      "has_calculation_steps": {
+        "total": 85,
+        "count": 85,
+        "average": 1.0
+      }
+    }
+  }
+}
