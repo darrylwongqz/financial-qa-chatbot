@@ -593,7 +593,7 @@ function DashboardPage() {
               Try the Chatbot
             </a>
             <a
-              href="https://github.com/yourusername/financial-qa-chatbot"
+              href="https://github.com/darrylwongqz/financial-qa-chatbot"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-700 bg-opacity-60 hover:bg-opacity-70 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"

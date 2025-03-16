@@ -3,7 +3,6 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import Panel from './ui/Panel';
 import ChatHeader from './ui/ChatHeader';
-import MessageBubble from './ui/MessageBubble';
 import LoadingIndicator from './ui/LoadingIndicator';
 import ChatInput from './ui/ChatInput';
 import ConfirmDialog from './ui/ConfirmDialog';
@@ -11,6 +10,9 @@ import { useUser } from '@clerk/nextjs';
 import { db } from '@/lib/firebase';
 import { collection, query, orderBy } from 'firebase/firestore';
 import { useCollection } from 'react-firebase-hooks/firestore';
+import { useContextStore } from '@/lib/contextStore';
+import MessageWithContext from './ui/MessageWithContext';
+import { ContextItem } from './ui/ContextAccordion';
 
 // Types
 type MessageRole = 'user' | 'bot';
@@ -64,6 +66,12 @@ export interface Context {
     word_count: number;
   };
   score: number;
+}
+
+interface ContextState {
+  contexts: ContextItem[] | null;
+  setContexts: (contexts: ContextItem[] | null) => void;
+  clearContexts: () => void;
 }
 
 const ChatInterface = () => {
@@ -162,6 +170,14 @@ const ChatInterface = () => {
     }
   }, [messages]);
 
+  // Get the context store
+  const setContexts = useContextStore(
+    (state: ContextState) => state.setContexts
+  );
+  const clearContexts = useContextStore(
+    (state: ContextState) => state.clearContexts
+  );
+
   const handleSendMessage = async () => {
     if (!input.trim() || !userId) return;
 
@@ -211,6 +227,11 @@ const ChatInterface = () => {
 
       const data: ChatResponse = await response.json();
 
+      // Store the context data
+      if (data.context && data.context.length > 0) {
+        setContexts(data.context);
+      }
+
       // Update conversation ID if this is a new conversation
       if (!currentConversationId) {
         setCurrentConversationId(data.conversation_id);
@@ -259,6 +280,9 @@ const ChatInterface = () => {
         errorMsg,
       ]);
       setWaitingForBotResponse(false);
+
+      // Clear contexts on error
+      clearContexts();
     } finally {
       setIsLoading(false);
     }
@@ -312,6 +336,9 @@ const ChatInterface = () => {
           token_usage: null,
         },
       ]);
+
+      // Clear contexts when clearing chat
+      clearContexts();
     } catch (error) {
       console.error('Error clearing chat:', error);
     } finally {
@@ -352,9 +379,11 @@ const ChatInterface = () => {
         ) : (
           <>
             {messages.map((message, index) => (
-              <MessageBubble key={index} role={message.sender}>
-                {message.message}
-              </MessageBubble>
+              <MessageWithContext
+                key={index}
+                role={message.sender}
+                message={message.message}
+              />
             ))}
             {/* Show loading indicator for bot response */}
             {waitingForBotResponse && (

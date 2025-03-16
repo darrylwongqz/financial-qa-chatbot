@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^6.12.4",
+    "@radix-ui/react-accordion": "^1.2.3",
     "@radix-ui/react-slot": "^1.1.2",
     "@tailwindcss/typography": "^0.5.16",
     "class-variance-authority": "^0.7.1",
@@ -27,7 +28,8 @@
     "sonner": "^2.0.1",
     "swr": "^2.3.3",
     "tailwind-merge": "^3.0.2",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "zustand": "^5.0.3"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
