@@ -47,14 +47,6 @@ async def add_chat_message(chat_request: ChatRequestDTO) -> Dict[str, Any]:
     model = chat_request.model or DEFAULT_MODEL
     retrieval_profile = chat_request.retrieval_profile or DEFAULT_RETRIEVAL_PROFILE
     
-    # Retrieve context
-    context_docs = await get_relevant_context_with_profile(
-        query=chat_request.question,
-        profile=retrieval_profile,
-        namespace=DENSE_NAMESPACE,
-        filter_condition=None
-    )
-    
     # First save the user's message to Firestore
     user_message = {
         "sender": "user",
@@ -65,6 +57,14 @@ async def add_chat_message(chat_request: ChatRequestDTO) -> Dict[str, Any]:
     }
     user_msg_id = await add_document(collection=get_user_chat_collection(chat_request.user_id), data=user_message)
     logger.info(f"Saved user message with ID: {user_msg_id}")
+    
+    # Retrieve context
+    context_docs = await get_relevant_context_with_profile(
+        query=chat_request.question,
+        profile=retrieval_profile,
+        namespace=DENSE_NAMESPACE,
+        filter_condition=None
+    )
     
     # Retrieve conversation history
     conversation_history = []
