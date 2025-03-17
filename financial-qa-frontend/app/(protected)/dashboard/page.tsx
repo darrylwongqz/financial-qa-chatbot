@@ -1,5 +1,8 @@
+'use client';
+
 import React from 'react';
 import resultsData from '../../../evaluation-results/results.json';
+import { motion } from 'framer-motion';
 
 // Define types for the evaluation data
 type QuestionTypeMetrics = {
@@ -58,11 +61,44 @@ const formatPercentage = (value: number) => {
 // Type assertion for the imported data
 const typedResultsData = resultsData as EvaluationResult[];
 
+// Animation variants
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5 },
+  },
+};
+
+const barVariants = {
+  hidden: { width: 0 },
+  visible: (width: number) => ({
+    width: `${width}%`,
+    transition: { duration: 0.8, ease: 'easeOut' },
+  }),
+};
+
 function DashboardPage() {
   return (
     <div className="container mx-auto p-6">
       {/* Evaluation Banner */}
-      <div className="bg-indigo-50 border-l-4 border-indigo-500 p-4 mb-6 rounded-md">
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="bg-indigo-50 border-l-4 border-indigo-500 p-4 mb-6 rounded-md"
+      >
         <div className="flex">
           <div className="flex-shrink-0">
             <svg
@@ -86,18 +122,36 @@ function DashboardPage() {
             </p>
           </div>
         </div>
-      </div>
+      </motion.div>
 
-      <h1 className="text-3xl font-bold mb-2">
+      <motion.h1
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+        className="text-3xl font-bold mb-2"
+      >
         Financial QA Chatbot Evaluation
-      </h1>
-      <p className="text-gray-600 mb-6">
+      </motion.h1>
+      <motion.p
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5, delay: 0.1 }}
+        className="text-gray-600 mb-6"
+      >
         Comprehensive performance analysis across different configurations
-      </p>
+      </motion.p>
 
       {/* Summary Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <div className="bg-white rounded-lg shadow p-6 border-l-4 border-green-500">
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8"
+      >
+        <motion.div
+          variants={itemVariants}
+          className="bg-white rounded-lg shadow p-6 border-l-4 border-green-500"
+        >
           <h2 className="text-lg font-semibold mb-2">Best Configuration</h2>
           <p className="text-2xl font-bold text-green-600">GPT-4 + Accurate</p>
           <p className="text-sm text-gray-500">
@@ -111,9 +165,12 @@ function DashboardPage() {
             Error rate:{' '}
             {formatPercentage(typedResultsData[5].metrics.error_rate)}
           </p>
-        </div>
+        </motion.div>
 
-        <div className="bg-white rounded-lg shadow p-6 border-l-4 border-blue-500">
+        <motion.div
+          variants={itemVariants}
+          className="bg-white rounded-lg shadow p-6 border-l-4 border-blue-500"
+        >
           <h2 className="text-lg font-semibold mb-2">Recommended Default</h2>
           <p className="text-2xl font-bold text-blue-600">GPT-4 + Balanced</p>
           <p className="text-sm text-gray-500">
@@ -127,9 +184,12 @@ function DashboardPage() {
             Error rate:{' '}
             {formatPercentage(typedResultsData[4].metrics.error_rate)}
           </p>
-        </div>
+        </motion.div>
 
-        <div className="bg-white rounded-lg shadow p-6 border-l-4 border-amber-500">
+        <motion.div
+          variants={itemVariants}
+          className="bg-white rounded-lg shadow p-6 border-l-4 border-amber-500"
+        >
           <h2 className="text-lg font-semibold mb-2">Budget Option</h2>
           <p className="text-2xl font-bold text-amber-600">
             GPT-3.5 + Accurate
@@ -145,11 +205,16 @@ function DashboardPage() {
             Error rate:{' '}
             {formatPercentage(typedResultsData[2].metrics.error_rate)}
           </p>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
 
       {/* Detailed Results Table */}
-      <div className="bg-white rounded-lg shadow mb-8">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.3 }}
+        className="bg-white rounded-lg shadow mb-8"
+      >
         <div className="px-6 py-4 border-b">
           <h2 className="text-xl font-semibold">Evaluation Results</h2>
           <p className="text-sm text-gray-500">
@@ -182,8 +247,11 @@ function DashboardPage() {
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {typedResultsData.map((result, index) => (
-                <tr
+                <motion.tr
                   key={index}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.3, delay: index * 0.1 }}
                   className={index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}
                 >
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -235,17 +303,26 @@ function DashboardPage() {
                         .count
                     }
                   </td>
-                </tr>
+                </motion.tr>
               ))}
             </tbody>
           </table>
         </div>
-      </div>
+      </motion.div>
 
       {/* Question Type Analysis */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8"
+      >
         {['extraction', 'calculation', 'other'].map((type) => (
-          <div key={type} className="bg-white rounded-lg shadow p-6">
+          <motion.div
+            key={type}
+            variants={itemVariants}
+            className="bg-white rounded-lg shadow p-6"
+          >
             <h2 className="text-lg font-semibold mb-2 capitalize">
               {type} Questions
             </h2>
@@ -262,7 +339,16 @@ function DashboardPage() {
                     </span>
                     <div className="flex items-center">
                       <div className="w-32 bg-gray-200 rounded-full h-2.5">
-                        <div
+                        <motion.div
+                          initial="hidden"
+                          animate="visible"
+                          custom={
+                            (1 -
+                              result.metrics.question_type_counts[type]
+                                .error_or_no_context.percentage) *
+                            100
+                          }
+                          variants={barVariants}
                           className={`h-2.5 rounded-full ${
                             type === 'extraction'
                               ? 'bg-blue-600'
@@ -270,15 +356,7 @@ function DashboardPage() {
                               ? 'bg-purple-600'
                               : 'bg-amber-600'
                           }`}
-                          style={{
-                            width: `${
-                              (1 -
-                                result.metrics.question_type_counts[type]
-                                  .error_or_no_context.percentage) *
-                              100
-                            }%`,
-                          }}
-                        ></div>
+                        ></motion.div>
                       </div>
                       <span className="ml-2 text-xs text-gray-600">
                         {formatPercentage(
@@ -294,12 +372,17 @@ function DashboardPage() {
             <p className="text-xs text-gray-500 mt-4">
               Success rate for {type} questions across configurations
             </p>
-          </div>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
 
       {/* Visual Comparison Chart */}
-      <div className="bg-white rounded-lg shadow mb-8">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.5 }}
+        className="bg-white rounded-lg shadow mb-8"
+      >
         <div className="px-6 py-4 border-b">
           <h2 className="text-xl font-semibold">Performance Comparison</h2>
           <p className="text-sm text-gray-500">
@@ -324,19 +407,20 @@ function DashboardPage() {
                     </div>
                     <div className="flex-1">
                       <div className="w-full bg-gray-200 rounded-full h-4">
-                        <div
+                        <motion.div
+                          initial="hidden"
+                          animate="visible"
+                          custom={
+                            result.metrics.non_error_metrics.numerical_accuracy
+                              .average * 100
+                          }
+                          variants={barVariants}
                           className={`h-4 rounded-full ${
                             result.model === 'gpt-4'
                               ? 'bg-indigo-600'
                               : 'bg-amber-500'
                           }`}
-                          style={{
-                            width: `${
-                              result.metrics.non_error_metrics
-                                .numerical_accuracy.average * 100
-                            }%`,
-                          }}
-                        ></div>
+                        ></motion.div>
                       </div>
                     </div>
                     <div className="w-16 text-sm font-medium text-gray-900 pl-4">
@@ -366,7 +450,11 @@ function DashboardPage() {
                     </div>
                     <div className="flex-1">
                       <div className="w-full bg-gray-200 rounded-full h-4">
-                        <div
+                        <motion.div
+                          initial="hidden"
+                          animate="visible"
+                          custom={result.metrics.error_rate * 100}
+                          variants={barVariants}
                           className={`h-4 rounded-full ${
                             result.metrics.error_rate < 0.1
                               ? 'bg-green-500'
@@ -374,10 +462,7 @@ function DashboardPage() {
                               ? 'bg-yellow-500'
                               : 'bg-red-500'
                           }`}
-                          style={{
-                            width: `${result.metrics.error_rate * 100}%`,
-                          }}
-                        ></div>
+                        ></motion.div>
                       </div>
                     </div>
                     <div className="w-16 text-sm font-medium text-gray-900 pl-4">
@@ -389,10 +474,15 @@ function DashboardPage() {
             </div>
           </div>
         </div>
-      </div>
+      </motion.div>
 
       {/* Key Findings */}
-      <div className="bg-white rounded-lg shadow mb-8">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.6 }}
+        className="bg-white rounded-lg shadow mb-8"
+      >
         <div className="px-6 py-4 border-b">
           <h2 className="text-xl font-semibold">Key Findings</h2>
         </div>
@@ -440,16 +530,24 @@ function DashboardPage() {
             </div>
           </div>
         </div>
-      </div>
+      </motion.div>
 
       {/* Recommendations */}
-      <div className="bg-white rounded-lg shadow">
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        className="bg-white rounded-lg shadow"
+      >
         <div className="px-6 py-4 border-b">
           <h2 className="text-xl font-semibold">Recommendations</h2>
         </div>
         <div className="p-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-green-50 p-4 rounded-lg border border-green-200">
+            <motion.div
+              variants={itemVariants}
+              className="bg-green-50 p-4 rounded-lg border border-green-200"
+            >
               <h3 className="font-semibold text-green-800 mb-2">
                 High-Precision Applications
               </h3>
@@ -463,8 +561,11 @@ function DashboardPage() {
                 Delivers the highest numerical and financial accuracy, minimal
                 error rate, and strong calculation transparency.
               </p>
-            </div>
-            <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+            </motion.div>
+            <motion.div
+              variants={itemVariants}
+              className="bg-blue-50 p-4 rounded-lg border border-blue-200"
+            >
               <h3 className="font-semibold text-blue-800 mb-2">
                 Most Use Cases (Recommended)
               </h3>
@@ -478,8 +579,11 @@ function DashboardPage() {
                 Offers performance metrics surprisingly close to accurate
                 retrieval while providing significantly faster response times.
               </p>
-            </div>
-            <div className="bg-amber-50 p-4 rounded-lg border border-amber-200">
+            </motion.div>
+            <motion.div
+              variants={itemVariants}
+              className="bg-amber-50 p-4 rounded-lg border border-amber-200"
+            >
               <h3 className="font-semibold text-amber-800 mb-2">
                 Speed-Critical Applications
               </h3>
@@ -493,8 +597,11 @@ function DashboardPage() {
                 Although error rates are higher, it provides faster response
                 times for real-time applications.
               </p>
-            </div>
-            <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
+            </motion.div>
+            <motion.div
+              variants={itemVariants}
+              className="bg-purple-50 p-4 rounded-lg border border-purple-200"
+            >
               <h3 className="font-semibold text-purple-800 mb-2">
                 Budget-Constrained Scenarios
               </h3>
@@ -508,13 +615,18 @@ function DashboardPage() {
                 Prioritizes high-quality retrieval over model size when cost is
                 a factor.
               </p>
-            </div>
+            </motion.div>
           </div>
         </div>
-      </div>
+      </motion.div>
 
       {/* Methodology Section */}
-      <div className="mt-8 bg-white rounded-lg shadow">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.8 }}
+        className="mt-8 bg-white rounded-lg shadow"
+      >
         <div className="px-6 py-4 border-b">
           <h2 className="text-xl font-semibold">Evaluation Methodology</h2>
         </div>
@@ -524,42 +636,72 @@ function DashboardPage() {
             key metrics:
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="border rounded p-3">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: 0.9 }}
+              className="border rounded p-3"
+            >
               <h3 className="font-medium text-gray-900">Error Rate</h3>
               <p className="text-xs text-gray-600">
                 Percentage of questions where the model failed to provide a
                 relevant answer or encountered context retrieval issues.
               </p>
-            </div>
-            <div className="border rounded p-3">
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: 0.95 }}
+              className="border rounded p-3"
+            >
               <h3 className="font-medium text-gray-900">Numerical Accuracy</h3>
               <p className="text-xs text-gray-600">
                 Binary measure indicating whether numerical values match the
                 ground truth within a tolerance of 1%.
               </p>
-            </div>
-            <div className="border rounded p-3">
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: 1.0 }}
+              className="border rounded p-3"
+            >
               <h3 className="font-medium text-gray-900">Financial Accuracy</h3>
               <p className="text-xs text-gray-600">
                 Similar to numerical accuracy but with a stricter tolerance for
                 financial figures.
               </p>
-            </div>
-            <div className="border rounded p-3">
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: 1.05 }}
+              className="border rounded p-3"
+            >
               <h3 className="font-medium text-gray-900">Answer Relevance</h3>
               <p className="text-xs text-gray-600">
                 A score (0.0–1.0) that gauges how relevant the answer is to the
                 question.
               </p>
-            </div>
-            <div className="border rounded p-3">
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: 1.1 }}
+              className="border rounded p-3"
+            >
               <h3 className="font-medium text-gray-900">Has Citations</h3>
               <p className="text-xs text-gray-600">
                 Binary indicator showing whether the answer includes proper
                 citations to sources.
               </p>
-            </div>
-            <div className="border rounded p-3">
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: 1.15 }}
+              className="border rounded p-3"
+            >
               <h3 className="font-medium text-gray-900">
                 Has Calculation Steps
               </h3>
@@ -567,13 +709,18 @@ function DashboardPage() {
                 For calculation questions, shows whether the model provides its
                 calculation steps.
               </p>
-            </div>
+            </motion.div>
           </div>
         </div>
-      </div>
+      </motion.div>
 
       {/* Conclusion Section */}
-      <div className="mt-8 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-lg shadow text-white">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 1.0 }}
+        className="mt-8 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-lg shadow text-white"
+      >
         <div className="p-6">
           <h2 className="text-xl font-semibold mb-4">Conclusion</h2>
           <p className="mb-6">
@@ -586,23 +733,27 @@ function DashboardPage() {
             providing significantly faster response times.
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
-            <a
+            <motion.a
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               href="/chat"
               className="inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-indigo-600 bg-white hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
               Try the Chatbot
-            </a>
-            <a
+            </motion.a>
+            <motion.a
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               href="https://github.com/darrylwongqz/financial-qa-chatbot"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-700 bg-opacity-60 hover:bg-opacity-70 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
               View Source Code
-            </a>
+            </motion.a>
           </div>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }

@@ -250,7 +250,6 @@ const ChatInterface = () => {
 
       setOptimisticMessages((prevMessages) => [
         ...prevMessages,
-        optimisticUserMsg,
         optimisticBotMsg,
       ]);
 
@@ -262,7 +261,7 @@ const ChatInterface = () => {
     } catch (error) {
       console.error('Error sending message:', error);
 
-      // Add error message
+      // Add error message (without duplicating the user message)
       const errorMsg: Message = {
         sender: 'bot',
         message:
@@ -274,11 +273,7 @@ const ChatInterface = () => {
         token_usage: null,
       };
 
-      setOptimisticMessages((prevMessages) => [
-        ...prevMessages,
-        optimisticUserMsg,
-        errorMsg,
-      ]);
+      setOptimisticMessages((prevMessages) => [...prevMessages, errorMsg]);
       setWaitingForBotResponse(false);
 
       // Clear contexts on error
