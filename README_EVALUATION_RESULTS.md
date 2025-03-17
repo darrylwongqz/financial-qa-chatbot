@@ -343,6 +343,82 @@ Our evaluation dashboard rendered in our frontend includes several visualization
 
 These visualizations are available in the evaluation dashboard and help stakeholders make informed decisions about which configuration to use for their specific needs.
 
+## Evaluation Shortcomings and Limitations
+
+While our evaluation provides valuable insights into the performance of our Financial QA chatbot, it's important to acknowledge several limitations:
+
+### 1. Sample Size Constraints
+
+Due to cost considerations and computational resources, we tested with only 200 questions per configuration rather than the full ConvFinQA dataset. This limited sample may not fully represent the diversity of financial questions users might ask in production. A more comprehensive evaluation would involve thousands of questions across various financial domains.
+
+### 2. Cost and Resource Limitations
+
+- **API Costs**: Running evaluations with GPT-4 incurs significant API costs, limiting our ability to perform more extensive testing or experiment with additional configurations.
+- **Computational Resources**: Evaluations were performed on local hardware (Apple M1 Max with 64GB RAM) rather than in a cloud environment that would better match production conditions.
+- **Time Constraints**: Comprehensive evaluations across more configurations would require substantially more time and resources.
+
+### 3. Single Evaluation Environment
+
+Results were collected in a controlled local environment with consistent network conditions and no concurrent workloads. Production environments often have:
+- Variable network latency
+- Concurrent requests affecting performance
+- Different hardware specifications
+- Usage patterns that may affect caching effectiveness
+
+### 4. Limited Ground Truth
+
+The evaluation relies on the ground truth provided in the ConvFinQA dataset, which may have its own limitations:
+- Some questions may have multiple valid interpretations, and multiple context documents that correspond to the same question
+- Financial data can be ambiguous or context-dependent
+
+### 5. Metric Limitations
+
+- **Heuristic-Based Metrics**: Several metrics (e.g., answer relevance, has citations) use heuristic approaches that may not perfectly capture all aspects of quality.
+- **Binary Metrics**: Some metrics are binary (e.g., numerical accuracy) when the reality may be more nuanced.
+- **Automated Evaluation**: The evaluation process relies on automated metrics rather than human judgment, which may miss qualitative aspects of responses.
+
+### 6. Model and Framework Versions
+
+- The evaluation was conducted with specific versions of models and frameworks that may change over time.
+- OpenAI's models undergo regular updates that could affect performance characteristics.
+- Future model releases may invalidate some of our comparative findings.
+
+### 7. Limited Question Types
+
+While we categorized questions into extraction, calculation, and other types, real-world financial questions may span multiple categories or introduce entirely new types of questions not well-represented in our evaluation.
+
+### 8. Limited Retrieval Variations
+
+We only tested three retrieval profiles (fast, balanced, accurate) with fixed parameters. A more thorough evaluation would test more granular variations in retrieval settings, such as:
+- Different numbers of retrieved documents
+- Various re-ranking thresholds
+- Alternative vector embedding models
+- Different combinations of dense and sparse retrieval
+
+### 9. User Experience Factors
+
+Our evaluation focuses on accuracy and technical metrics but doesn't fully capture user experience factors such as:
+- Perceived response quality
+- User satisfaction with different response times
+- Readability and clarity of explanations
+- Trust factors in financial information
+
+### 10. Single-Turn Evaluation
+
+The evaluation primarily assesses single-turn performance rather than multi-turn conversations, where context maintenance and coherence become increasingly important.
+
+## Mitigating These Limitations
+
+Despite these limitations, we've taken steps to ensure our evaluation provides valuable insights:
+
+1. **Diverse Question Selection**: We carefully selected 200 questions to represent a broad range of financial topics and question types.
+2. **Consistent Methodology**: All configurations were evaluated using identical methodology and metrics.
+3. **Transparent Reporting**: We've documented all aspects of our evaluation process and metrics calculation.
+4. **Practical Focus**: Our evaluation focuses on practical, real-world use cases rather than purely academic metrics.
+5. **Multiple Metrics**: By using a range of metrics, we provide a more complete picture of performance.
+
+Future evaluations will aim to address these limitations by incorporating more diverse test sets, user studies, and additional configurations as resources permit.
+
 ## Future Improvements
 
 1. **Enhanced Retrieval Strategies**:  
