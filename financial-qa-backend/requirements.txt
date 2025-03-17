@@ -24,6 +24,7 @@ google-cloud-firestore>=2.13.1
 
 # ML and NLP
 sentence-transformers>=2.2.2
+nltk==3.9.1
 
 # Utilities
 coloredlogs>=15.0.1
