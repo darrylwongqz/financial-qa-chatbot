@@ -258,7 +258,7 @@ const ChatInterface = () => {
       setTimeout(() => {
         setOptimisticMessages([]);
         setWaitingForBotResponse(false);
-      }, 1000);
+      }, 300);
     } catch (error) {
       console.error('Error sending message:', error);
 
