@@ -2,7 +2,7 @@
 
 A sophisticated AI-powered financial question answering system with high accuracy and transparency, built using Retrieval Augmented Generation (RAG) technology.
 
-[Live Demo](https://financial-qa-chatbot.example.com) (Coming Soon)
+[Live Demo](https://financial-qa-frontend-production.up.railway.app/)
 
 If you want to skip to the chatbot evaluation results straight, please refer to [README_EVALUATION_RESULTS.md](README_EVALUATION_RESULTS.md).
 
