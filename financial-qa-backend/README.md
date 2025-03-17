@@ -6,7 +6,7 @@ A FastAPI-based backend for a financial question answering system. This system u
 
 The Financial QA Backend powers the Financial QA Chatbot, providing intelligent responses to financial questions using state-of-the-art language models and vector search technology. The system is designed to be fast, accurate, and transparent, with configurable retrieval profiles to balance speed and accuracy based on user needs.
 
-For a comprehensive breakdown of the evaluation methodology and results, please refer to [README_EVALUATION_RESULTS.md](README_EVALUATION_RESULTS.md).
+For a comprehensive breakdown of the evaluation methodology and results, please refer to [README_EVALUATION_RESULTS.md](https://github.com/darrylwongqz/financial-qa-chatbot/blob/main/README_EVALUATION_RESULTS.md).
 
 ## Features
 
@@ -147,7 +147,7 @@ Our evaluation framework assesses the chatbot using the following key metrics:
 - **GPT-4 with Balanced Retrieval**: Recommended default configuration (75% numerical accuracy, 7.5% error rate)
 - **GPT-3.5-Turbo with Accurate Retrieval**: Budget option (72% numerical accuracy, 6.5% error rate)
 
-For detailed evaluation results and methodology, see [README_EVALUATION_RESULTS.md](README_EVALUATION_RESULTS.md).
+For detailed evaluation results and methodology, see [README_EVALUATION_RESULTS.md](https://github.com/darrylwongqz/financial-qa-chatbot/blob/main/README_EVALUATION_RESULTS.md).
 
 ## Running Evaluations
 
