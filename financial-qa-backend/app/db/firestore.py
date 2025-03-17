@@ -25,17 +25,41 @@ def initialize_firestore():
         return
     
     try:
-        # Set the environment variable to point to the service key file
-        service_key_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "service_key.json")
+        # Try to get the service account JSON from environment variable
+        service_account_json = os.getenv("FIREBASE_SERVICE_ACCOUNT_JSON")
         
-        if not os.path.exists(service_key_path):
-            raise FileNotFoundError(f"File {service_key_path} was not found.")
+        if service_account_json:
+            # Create a temporary file to store the JSON content
+            import json
+            import tempfile
             
-        os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = service_key_path
-        logger.info(f"Using service key at: {service_key_path}")
-        
-        db = AsyncClient()
-        logger.info("Successfully initialized asynchronous Firestore client")
+            # Create a temporary file
+            fd, temp_path = tempfile.mkstemp()
+            with os.fdopen(fd, 'w') as tmp:
+                tmp.write(service_account_json)
+            
+            # Set the environment variable to point to the temporary file
+            os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = temp_path
+            logger.info(f"Using service account JSON from environment variable")
+            
+            # Initialize Firestore client
+            db = AsyncClient()
+            logger.info("Successfully initialized asynchronous Firestore client from environment variable")
+            
+            # Clean up the temporary file
+            os.unlink(temp_path)
+        else:
+            # Fall back to file-based approach for local development
+            service_key_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "service_key.json")
+            
+            if not os.path.exists(service_key_path):
+                raise FileNotFoundError(f"File {service_key_path} was not found.")
+                
+            os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = service_key_path
+            logger.info(f"Using service key at: {service_key_path}")
+            
+            db = AsyncClient()
+            logger.info("Successfully initialized asynchronous Firestore client from file")
     except Exception as e:
         logger.error(f"Failed to initialize Firestore client: {str(e)}")
         db = None
