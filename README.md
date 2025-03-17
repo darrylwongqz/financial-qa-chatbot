@@ -6,8 +6,9 @@ A sophisticated AI-powered financial question answering system with high accurac
 
 If you want to skip to the chatbot evaluation results straight, please refer to [README_EVALUATION_RESULTS.md](README_EVALUATION_RESULTS.md).
 
-A prettified version of the evaluation metrics is available [in the dashboard tab of the app](https://financial-qa-frontend-production.up.railway.app/dashboard)
-Note that you need to log in with your google account before viewing the prettified metrics
+A prettified version of the evaluation metrics is available [in the dashboard tab of the app](https://financial-qa-frontend-production.up.railway.app/dashboard).
+
+**Note that you need to log in with your google account before viewing the prettified metrics**
 
 ## Overview
 
