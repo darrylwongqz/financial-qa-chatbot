@@ -14,6 +14,8 @@ import { useContextStore } from '@/lib/contextStore';
 
 const exampleQuestions = [
   'What was the percentage change in the net cash from operating activities from 2008-2009?',
+  'Give me all the prices of crude oil and their corresponding dates.',
+  'What was the change in the price of brent crude oil between 2010 and 2012?',
   'How did the S&P 500 perform in 2008?',
   'What percentage was that? (as a follow-up)',
 ];
