@@ -752,8 +752,9 @@ function DashboardPage() {
               <p className="text-xs text-gray-600">
                 Percentage of questions where the model failed to provide a
                 relevant answer or encountered context retrieval issues.
-                Identified using pattern matching against phrases like "I'm
-                sorry," "couldn't find," etc.
+                Identified using pattern matching against phrases like
+                &ldquo;I&apos;m sorry,&rdquo; &ldquo;couldn&apos;t find,&rdquo;
+                etc.
               </p>
             </motion.div>
             <motion.div
