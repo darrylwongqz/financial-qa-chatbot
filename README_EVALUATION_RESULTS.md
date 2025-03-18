@@ -266,19 +266,22 @@ The retrieval profile significantly affects overall performance:
 Performance varies by question type:
 
 - **Extraction Questions**:
-  - GPT‑4 with accurate retrieval achieves near-perfect performance (1% error rate).
-  - High citation rates are observed, reflecting effective extraction from source documents.
-  - Both models perform well on these questions, with GPT-4 having a slight edge.
+  - GPT-4 with accurate retrieval achieves the best performance with 0.0% error rate.
+  - Error rates vary significantly across configurations, with GPT-3.5-turbo + balanced showing the highest at 42.9%.
+  - These questions represent the smallest portion of our test set (7 questions total).
 
 - **Calculation Questions**:
-  - These show higher error rates overall.
-  - GPT‑4's enhanced reasoning and complete presentation of calculation steps are particularly evident.
-  - Fast retrieval profiles show the greatest struggle in this category (35-40% error rates).
-  - The gap between GPT-4 and GPT-3.5-turbo is most pronounced in this category.
+  - These represent the majority of our test set (118 questions total).
+  - Error rates are generally moderate, ranging from 6.8% (GPT-4 + accurate) to 28.0% (GPT-3.5-turbo + fast).
+  - All configurations show 100% inclusion of calculation steps when providing answers.
+  - Fast retrieval profiles show consistently higher error rates for both models.
+  - GPT-4 and GPT-3.5-turbo show similar error rates with accurate and balanced retrieval.
 
 - **Other Questions**:
-  - Error rates and performance lie between extraction and calculation questions.
-  - GPT‑4 handles these significantly better than GPT‑3.5‑turbo.
+  - These questions (75 total) show error rates that vary widely across configurations.
+  - GPT-4 with accurate retrieval performs best (2.7% error rate).
+  - GPT-3.5-turbo with fast retrieval shows the highest error rate at 33.3%.
+  - All GPT-4 configurations outperform their GPT-3.5-turbo counterparts for this question type.
 
 ### Performance-Cost Analysis
 
