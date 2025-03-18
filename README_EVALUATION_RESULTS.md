@@ -163,38 +163,42 @@ This metric is measured in seconds and helps us understand the performance impli
 
 ### Performance by Question Type
 
-#### Extraction Questions
+Here we present a breakdown of error rates by question type. This data shows how each model and retrieval profile performs across different question categories.
 
-| Model | Retrieval Profile | Error Rate | Numerical Accuracy | Answer Relevance | Has Citations |
-|-------|-------------------|------------|-------------------|-----------------|--------------|
-| GPT-4 | Accurate | 0.0% | 85.0% | 88.0% | 100.0% |
-| GPT-4 | Balanced | 14.3% | 82.0% | 85.0% | 100.0% |
-| GPT-4 | Fast | 14.3% | 70.0% | 75.0% | 100.0% |
-| GPT-3.5-turbo | Accurate | 14.3% | 78.0% | 80.0% | 100.0% |
-| GPT-3.5-turbo | Balanced | 42.9% | 75.0% | 78.0% | 100.0% |
-| GPT-3.5-turbo | Fast | 28.6% | 65.0% | 70.0% | 100.0% |
+#### Extraction Questions (7 total)
 
-#### Calculation Questions
+| Model | Retrieval Profile | Error Rate |
+|-------|-------------------|------------|
+| GPT-4 | Accurate | 0.0% |
+| GPT-4 | Balanced | 14.3% |
+| GPT-4 | Fast | 14.3% |
+| GPT-3.5-turbo | Accurate | 14.3% |
+| GPT-3.5-turbo | Balanced | 42.9% |
+| GPT-3.5-turbo | Fast | 28.6% |
 
-| Model | Retrieval Profile | Error Rate | Numerical Accuracy | Has Calculation Steps | Partial Numerical Match |
-|-------|-------------------|------------|-------------------|----------------------|------------------------|
-| GPT-4 | Accurate | 6.8% | 75.0% | 100.0% | 0.80 |
-| GPT-4 | Balanced | 7.6% | 70.0% | 100.0% | 0.75 |
-| GPT-4 | Fast | 24.6% | 50.0% | 100.0% | 0.70 |
-| GPT-3.5-turbo | Accurate | 7.6% | 65.0% | 100.0% | 0.70 |
-| GPT-3.5-turbo | Balanced | 8.5% | 60.0% | 100.0% | 0.68 |
-| GPT-3.5-turbo | Fast | 28.0% | 40.0% | 100.0% | 0.66 |
+#### Calculation Questions (118 total)
 
-#### Other Questions
+| Model | Retrieval Profile | Error Rate | Has Calculation Steps |
+|-------|-------------------|------------|-------------------|
+| GPT-4 | Accurate | 6.8% | 100.0% |
+| GPT-4 | Balanced | 7.6% | 100.0% |
+| GPT-4 | Fast | 24.6% | 100.0% |
+| GPT-3.5-turbo | Accurate | 7.6% | 100.0% |
+| GPT-3.5-turbo | Balanced | 8.5% | 100.0% |
+| GPT-3.5-turbo | Fast | 28.0% | 100.0% |
 
-| Model | Retrieval Profile | Error Rate | Numerical Accuracy | Answer Relevance | Has Citations |
-|-------|-------------------|------------|-------------------|-----------------|--------------|
-| GPT-4 | Accurate | 2.7% | 82.0% | 85.0% | 100.0% |
-| GPT-4 | Balanced | 6.7% | 77.0% | 80.0% | 100.0% |
-| GPT-4 | Fast | 26.7% | 65.0% | 70.0% | 100.0% |
-| GPT-3.5-turbo | Accurate | 4.0% | 75.0% | 75.0% | 100.0% |
-| GPT-3.5-turbo | Balanced | 13.3% | 72.0% | 72.0% | 100.0% |
-| GPT-3.5-turbo | Fast | 33.3% | 60.0% | 62.0% | 100.0% |
+#### Other Questions (75 total)
+
+| Model | Retrieval Profile | Error Rate |
+|-------|-------------------|------------|
+| GPT-4 | Accurate | 2.7% |
+| GPT-4 | Balanced | 6.7% |
+| GPT-4 | Fast | 26.7% |
+| GPT-3.5-turbo | Accurate | 4.0% |
+| GPT-3.5-turbo | Balanced | 13.3% |
+| GPT-3.5-turbo | Fast | 33.3% |
+
+The error rates above show how often each configuration failed to provide a relevant answer for each question type. Note that calculation questions show a 100% rate of providing calculation steps when an answer is generated, indicating our prompt engineering for step-by-step reasoning is effective.
 
 ### Response Time Analysis
 

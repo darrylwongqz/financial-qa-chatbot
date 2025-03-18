@@ -471,7 +471,7 @@ function DashboardPage() {
             {/* Numerical Accuracy Chart */}
             <div>
               <h3 className="text-sm font-medium text-gray-500 mb-3">
-                Numerical Accuracy
+                Numerical Accuracy (higher is better)
               </h3>
               <div className="space-y-4">
                 {typedResultsData.map((result, index) => (
