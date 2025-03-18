@@ -141,6 +141,58 @@ function DashboardPage() {
         Comprehensive performance analysis across different configurations
       </motion.p>
 
+      {/* Evaluation Scope Preamble */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+        className="bg-white p-4 rounded-lg shadow-sm mb-6"
+      >
+        <h2 className="text-lg font-semibold mb-2">Evaluation Scope</h2>
+        <p className="text-sm text-gray-700 mb-2">
+          Our evaluation was conducted on a curated set of{' '}
+          <strong>200 financial questions</strong> from the ConvFinQA dataset:
+        </p>
+        <div className="flex flex-wrap gap-2">
+          <span className="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium bg-purple-100 text-purple-800">
+            <svg
+              className="mr-1.5 h-2 w-2 text-purple-400"
+              fill="currentColor"
+              viewBox="0 0 8 8"
+            >
+              <circle cx="4" cy="4" r="3" />
+            </svg>
+            Calculation:{' '}
+            {typedResultsData[0].metrics.question_type_counts.calculation.total}{' '}
+            questions
+          </span>
+          <span className="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+            <svg
+              className="mr-1.5 h-2 w-2 text-blue-400"
+              fill="currentColor"
+              viewBox="0 0 8 8"
+            >
+              <circle cx="4" cy="4" r="3" />
+            </svg>
+            Extraction:{' '}
+            {typedResultsData[0].metrics.question_type_counts.extraction.total}{' '}
+            questions
+          </span>
+          <span className="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium bg-amber-100 text-amber-800">
+            <svg
+              className="mr-1.5 h-2 w-2 text-amber-400"
+              fill="currentColor"
+              viewBox="0 0 8 8"
+            >
+              <circle cx="4" cy="4" r="3" />
+            </svg>
+            Other:{' '}
+            {typedResultsData[0].metrics.question_type_counts.other.total}{' '}
+            questions
+          </span>
+        </div>
+      </motion.div>
+
       {/* Summary Cards */}
       <motion.div
         variants={containerVariants}
@@ -220,6 +272,22 @@ function DashboardPage() {
           <p className="text-sm text-gray-500">
             Comparison across models and retrieval profiles
           </p>
+          <div className="mt-2 text-xs text-amber-700 flex items-center">
+            <svg
+              className="h-4 w-4 mr-1 text-amber-500"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fillRule="evenodd"
+                d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+                clipRule="evenodd"
+              />
+            </svg>
+            Note: Accuracy metrics are calculated only on non-error responses,
+            excluding failed retrievals.
+          </div>
         </div>
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
@@ -239,6 +307,9 @@ function DashboardPage() {
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Answer Relevance
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Has Citations
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Calculation Steps
@@ -293,15 +364,17 @@ function DashboardPage() {
                     )}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    {
-                      result.metrics.question_type_counts.calculation.successful
-                        .has_calculation_steps
-                    }{' '}
-                    /
-                    {
-                      result.metrics.question_type_counts.calculation.successful
-                        .count
-                    }
+                    {formatPercentage(
+                      result.metrics.non_error_metrics.has_citations.average
+                    )}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {formatPercentage(
+                      (result.metrics.question_type_counts.calculation
+                        .successful.has_calculation_steps || 0) /
+                        (result.metrics.question_type_counts.calculation
+                          .successful.count || 1)
+                    )}
                   </td>
                 </motion.tr>
               ))}
@@ -324,7 +397,11 @@ function DashboardPage() {
             className="bg-white rounded-lg shadow p-6"
           >
             <h2 className="text-lg font-semibold mb-2 capitalize">
-              {type} Questions
+              {type} Questions{' '}
+              <span className="text-sm font-normal text-gray-500">
+                ({typedResultsData[0].metrics.question_type_counts[type].total}{' '}
+                questions)
+              </span>
             </h2>
             <div className="space-y-4">
               {typedResultsData
@@ -496,16 +573,31 @@ function DashboardPage() {
                   metrics
                 </li>
                 <li>
-                  GPT-4 with accurate retrieval achieves 80% numerical accuracy
-                  vs 72% for GPT-3.5-turbo
+                  GPT-4 with accurate retrieval achieves{' '}
+                  {formatPercentage(
+                    typedResultsData[5].metrics.non_error_metrics
+                      .numerical_accuracy.average
+                  )}{' '}
+                  numerical accuracy vs{' '}
+                  {formatPercentage(
+                    typedResultsData[2].metrics.non_error_metrics
+                      .numerical_accuracy.average
+                  )}{' '}
+                  for GPT-3.5-turbo
                 </li>
                 <li>
-                  GPT-4 delivers more relevant answers (82% relevance with
-                  accurate retrieval)
+                  GPT-4 delivers more relevant answers (
+                  {formatPercentage(
+                    typedResultsData[5].metrics.non_error_metrics
+                      .answer_relevance.average
+                  )}{' '}
+                  relevance with accurate retrieval)
                 </li>
                 <li>
-                  GPT-4 demonstrates superior performance on calculation
-                  questions
+                  Error rates are lower with GPT-4 (
+                  {formatPercentage(typedResultsData[5].metrics.error_rate)}{' '}
+                  with accurate retrieval) compared to GPT-3.5-turbo (
+                  {formatPercentage(typedResultsData[2].metrics.error_rate)})
                 </li>
               </ul>
             </div>
@@ -635,6 +727,20 @@ function DashboardPage() {
             Our evaluation framework assesses the chatbot using the following
             key metrics:
           </p>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.85 }}
+            className="mb-4 bg-blue-50 p-3 border border-blue-200 rounded-md text-sm text-blue-800"
+          >
+            <strong>Important Note:</strong> Performance metrics (Numerical
+            Accuracy, Financial Accuracy, Answer Relevance, etc.) are calculated
+            only on non-error responses. This means these metrics represent the
+            quality of successful responses, excluding cases where the model
+            failed to retrieve sufficient context or provide a relevant answer.
+            The Error Rate metric should be considered alongside performance
+            metrics for a complete picture.
+          </motion.div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <motion.div
               initial={{ opacity: 0, x: -20 }}
@@ -646,6 +752,8 @@ function DashboardPage() {
               <p className="text-xs text-gray-600">
                 Percentage of questions where the model failed to provide a
                 relevant answer or encountered context retrieval issues.
+                Identified using pattern matching against phrases like "I'm
+                sorry," "couldn't find," etc.
               </p>
             </motion.div>
             <motion.div
@@ -656,8 +764,10 @@ function DashboardPage() {
             >
               <h3 className="font-medium text-gray-900">Numerical Accuracy</h3>
               <p className="text-xs text-gray-600">
-                Binary measure indicating whether numerical values match the
-                ground truth within a tolerance of 1%.
+                Binary measure (1 or 0) indicating whether numerical values
+                match the ground truth within a tolerance of 1%. Values are
+                normalized by removing currency symbols, converting text
+                multipliers, etc.
               </p>
             </motion.div>
             <motion.div
@@ -668,8 +778,9 @@ function DashboardPage() {
             >
               <h3 className="font-medium text-gray-900">Financial Accuracy</h3>
               <p className="text-xs text-gray-600">
-                Similar to numerical accuracy but with a stricter tolerance for
-                financial figures.
+                Similar to numerical accuracy but tracked separately for
+                financial figures. Currently uses the same 1% tolerance but
+                allows for future adjustments.
               </p>
             </motion.div>
             <motion.div
@@ -680,8 +791,10 @@ function DashboardPage() {
             >
               <h3 className="font-medium text-gray-900">Answer Relevance</h3>
               <p className="text-xs text-gray-600">
-                A score (0.0–1.0) that gauges how relevant the answer is to the
-                question.
+                A score (0.0–1.0) based on answer length, presence of financial
+                terms, and absence of error messages. Uses a heuristic approach
+                with higher scores for substantive, financial term-rich
+                responses.
               </p>
             </motion.div>
             <motion.div
@@ -692,8 +805,9 @@ function DashboardPage() {
             >
               <h3 className="font-medium text-gray-900">Has Citations</h3>
               <p className="text-xs text-gray-600">
-                Binary indicator showing whether the answer includes proper
-                citations to sources.
+                Binary indicator (1 or 0) showing whether the answer includes
+                proper citations to sources. Detected using regex patterns for
+                reference markers, attribution phrases, etc.
               </p>
             </motion.div>
             <motion.div
@@ -706,10 +820,60 @@ function DashboardPage() {
                 Has Calculation Steps
               </h3>
               <p className="text-xs text-gray-600">
-                For calculation questions, shows whether the model provides its
-                calculation steps.
+                For calculation questions, indicates whether the model provides
+                its calculation steps. Detected through mathematical operators,
+                equals signs, and calculation-related terms.
               </p>
             </motion.div>
+          </div>
+
+          <div className="mt-8 p-4 bg-gray-50 rounded-md border border-gray-200">
+            <h3 className="font-medium text-gray-900 mb-2">
+              Methodology Limitations
+            </h3>
+            <ul className="text-xs text-gray-600 space-y-2 list-disc pl-4">
+              <li>
+                <strong>Sample Size:</strong> Evaluation used only 200 questions
+                per configuration due to cost constraints.
+              </li>
+              <li>
+                <strong>Evaluation Environment:</strong> Tests run on local
+                hardware rather than production cloud environment.
+              </li>
+              <li>
+                <strong>Question Distribution:</strong> Uneven distribution
+                across question types may skew overall metrics.
+              </li>
+              <li>
+                <strong>Binary Metrics:</strong> Some metrics use binary
+                measures when reality is more nuanced.
+              </li>
+              <li>
+                <strong>Non-Error Metrics:</strong> Performance metrics
+                calculated only on successful responses may overstate
+                performance.
+              </li>
+              <li>
+                <strong>Automated Evaluation:</strong> Metrics rely on automated
+                calculations rather than human judgment.
+              </li>
+              <li>
+                <strong>Limited Retrieval Variations:</strong> Only three
+                retrieval profiles were tested with fixed parameters.
+              </li>
+            </ul>
+            <p className="text-xs text-gray-500 mt-2 italic">
+              For complete methodology details, refer to our{' '}
+              <a
+                href="https://github.com/darrylwongqz/financial-qa-chatbot/blob/main/README_EVALUATION_RESULTS.md"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-600 hover:underline"
+              >
+                documentation
+              </a>
+              .
+            </p>
           </div>
         </div>
       </motion.div>

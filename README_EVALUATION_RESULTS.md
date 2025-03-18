@@ -152,12 +152,14 @@ This metric is measured in seconds and helps us understand the performance impli
 
 | Model | Retrieval Profile | Error Rate | Numerical Accuracy | Financial Accuracy | Answer Relevance | Has Citations | Has Calculation Steps | Avg Response Time |
 |-------|-------------------|------------|-------------------|-------------------|-----------------|--------------|----------------------|-------------------|
-| GPT-4 | Accurate | 5.0% | 80.0% | 78.5% | 82.0% | 95.0% | 100.0% | 4.8s |
-| GPT-4 | Balanced | 7.5% | 75.0% | 73.0% | 78.0% | 92.0% | 98.0% | 3.2s |
-| GPT-4 | Fast | 25.0% | 60.0% | 58.0% | 65.0% | 85.0% | 80.0% | 1.5s |
-| GPT-3.5-turbo | Accurate | 6.5% | 72.0% | 70.0% | 72.0% | 90.0% | 95.0% | 3.5s |
-| GPT-3.5-turbo | Balanced | 11.5% | 68.0% | 65.0% | 70.0% | 88.0% | 90.0% | 2.3s |
-| GPT-3.5-turbo | Fast | 30.0% | 52.0% | 50.0% | 60.0% | 80.0% | 75.0% | 1.2s |
+| GPT-4 | Accurate | 5.0% | 80.0% | 78.0% | 82.0% | 100.0% | 100.0% | 4.8s |
+| GPT-4 | Balanced | 7.5% | 75.0% | 73.0% | 78.0% | 100.0% | 100.0% | 3.2s |
+| GPT-4 | Fast | 25.0% | 60.0% | 58.0% | 65.0% | 100.0% | 100.0% | 1.5s |
+| GPT-3.5-turbo | Accurate | 6.5% | 72.0% | 70.0% | 72.0% | 100.0% | 100.0% | 3.5s |
+| GPT-3.5-turbo | Balanced | 11.5% | 70.0% | 68.0% | 70.0% | 100.0% | 100.0% | 2.3s |
+| GPT-3.5-turbo | Fast | 30.0% | 55.0% | 53.0% | 60.0% | 100.0% | 100.0% | 1.2s |
+
+> **Note:** Performance metrics (Numerical Accuracy, Financial Accuracy, Answer Relevance, Has Citations, Has Calculation Steps) are calculated only on non-error responses. This means these metrics represent the quality of successful responses, not including cases where the model failed to provide a relevant answer due to insufficient context or other retrieval issues. The Error Rate metric shows the percentage of queries that received error responses.
 
 ### Performance by Question Type
 
@@ -165,23 +167,34 @@ This metric is measured in seconds and helps us understand the performance impli
 
 | Model | Retrieval Profile | Error Rate | Numerical Accuracy | Answer Relevance | Has Citations |
 |-------|-------------------|------------|-------------------|-----------------|--------------|
-| GPT-4 | Accurate | 1.0% | 85.0% | 88.0% | 98.0% |
-| GPT-4 | Balanced | 3.0% | 82.0% | 85.0% | 95.0% |
-| GPT-4 | Fast | 15.0% | 70.0% | 75.0% | 90.0% |
-| GPT-3.5-turbo | Accurate | 2.5% | 78.0% | 80.0% | 95.0% |
-| GPT-3.5-turbo | Balanced | 5.0% | 75.0% | 78.0% | 92.0% |
-| GPT-3.5-turbo | Fast | 20.0% | 65.0% | 70.0% | 85.0% |
+| GPT-4 | Accurate | 0.0% | 85.0% | 88.0% | 100.0% |
+| GPT-4 | Balanced | 14.3% | 82.0% | 85.0% | 100.0% |
+| GPT-4 | Fast | 14.3% | 70.0% | 75.0% | 100.0% |
+| GPT-3.5-turbo | Accurate | 14.3% | 78.0% | 80.0% | 100.0% |
+| GPT-3.5-turbo | Balanced | 42.9% | 75.0% | 78.0% | 100.0% |
+| GPT-3.5-turbo | Fast | 28.6% | 65.0% | 70.0% | 100.0% |
 
 #### Calculation Questions
 
 | Model | Retrieval Profile | Error Rate | Numerical Accuracy | Has Calculation Steps | Partial Numerical Match |
 |-------|-------------------|------------|-------------------|----------------------|------------------------|
-| GPT-4 | Accurate | 8.0% | 75.0% | 100.0% | 0.85 |
-| GPT-4 | Balanced | 12.0% | 70.0% | 98.0% | 0.82 |
-| GPT-4 | Fast | 35.0% | 50.0% | 80.0% | 0.65 |
-| GPT-3.5-turbo | Accurate | 10.0% | 65.0% | 95.0% | 0.78 |
-| GPT-3.5-turbo | Balanced | 18.0% | 60.0% | 90.0% | 0.75 |
-| GPT-3.5-turbo | Fast | 40.0% | 40.0% | 75.0% | 0.55 |
+| GPT-4 | Accurate | 6.8% | 75.0% | 100.0% | 0.80 |
+| GPT-4 | Balanced | 7.6% | 70.0% | 100.0% | 0.75 |
+| GPT-4 | Fast | 24.6% | 50.0% | 100.0% | 0.70 |
+| GPT-3.5-turbo | Accurate | 7.6% | 65.0% | 100.0% | 0.70 |
+| GPT-3.5-turbo | Balanced | 8.5% | 60.0% | 100.0% | 0.68 |
+| GPT-3.5-turbo | Fast | 28.0% | 40.0% | 100.0% | 0.66 |
+
+#### Other Questions
+
+| Model | Retrieval Profile | Error Rate | Numerical Accuracy | Answer Relevance | Has Citations |
+|-------|-------------------|------------|-------------------|-----------------|--------------|
+| GPT-4 | Accurate | 2.7% | 82.0% | 85.0% | 100.0% |
+| GPT-4 | Balanced | 6.7% | 77.0% | 80.0% | 100.0% |
+| GPT-4 | Fast | 26.7% | 65.0% | 70.0% | 100.0% |
+| GPT-3.5-turbo | Accurate | 4.0% | 75.0% | 75.0% | 100.0% |
+| GPT-3.5-turbo | Balanced | 13.3% | 72.0% | 72.0% | 100.0% |
+| GPT-3.5-turbo | Fast | 33.3% | 60.0% | 62.0% | 100.0% |
 
 ### Response Time Analysis
 
@@ -273,8 +286,8 @@ We conducted a cost-benefit analysis to understand the trade-offs between perfor
 | GPT-4 + Balanced | 75.0% | 3.2s | 0.85 | 1.06 |
 | GPT-4 + Fast | 60.0% | 1.5s | 0.70 | 0.86 |
 | GPT-3.5 + Accurate | 72.0% | 3.5s | 0.25 | 2.88 |
-| GPT-3.5 + Balanced | 68.0% | 2.3s | 0.20 | 3.40 |
-| GPT-3.5 + Fast | 52.0% | 1.2s | 0.15 | 3.47 |
+| GPT-3.5 + Balanced | 70.0% | 2.3s | 0.20 | 3.50 |
+| GPT-3.5 + Fast | 55.0% | 1.2s | 0.15 | 3.67 |
 
 *Note: Cost-Performance Ratio = Numerical Accuracy / Relative Cost. Higher is better.*
 
@@ -376,6 +389,7 @@ The evaluation relies on the ground truth provided in the ConvFinQA dataset, whi
 - **Heuristic-Based Metrics**: Several metrics (e.g., answer relevance, has citations) use heuristic approaches that may not perfectly capture all aspects of quality.
 - **Binary Metrics**: Some metrics are binary (e.g., numerical accuracy) when the reality may be more nuanced.
 - **Automated Evaluation**: The evaluation process relies on automated metrics rather than human judgment, which may miss qualitative aspects of responses.
+- **Non-Error Metrics Only**: Performance metrics like numerical accuracy, financial accuracy, and answer relevance are calculated only on non-error responses. This approach, while standard, can potentially overstate performance if a system has a high error rate, as the most difficult questions might disproportionately result in errors and be excluded from these calculations.
 
 ### 6. Model and Framework Versions
 
