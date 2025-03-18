@@ -298,7 +298,37 @@ We conducted a cost-benefit analysis to understand the trade-offs between perfor
 
 *Note: Cost-Performance Ratio = Numerical Accuracy / Relative Cost. Higher is better.*
 
-This analysis reveals that GPT-3.5-turbo with Accurate retrieval offers the best value in terms of accuracy per dollar spent, while GPT-4 with Balanced retrieval offers the best overall balance of performance, speed, and cost.
+#### Cost Calculation Methodology
+
+The **Relative Cost** values are computed by normalizing each configuration's total API cost against GPT-4 + Accurate retrieval (set as 1.00). The calculation follows these steps:
+
+1. **Base API Costs**: 
+   - GPT-4: $0.03 per 1K input tokens and $0.06 per 1K output tokens
+   - GPT-3.5-turbo: $0.0005 per 1K input tokens and $0.0015 per 1K output tokens
+
+2. **Total API Cost** for each configuration is calculated as:
+   ```
+   Total API Cost = (Input Tokens × Input Token Rate) + (Output Tokens × Output Token Rate)
+   ```
+
+3. **Input Token Count** varies by retrieval profile:
+   - Accurate: ~6,000 tokens (10 documents with reranking)
+   - Balanced: ~4,000 tokens (7 documents with reranking)
+   - Fast: ~2,000 tokens (5 documents, no reranking)
+
+4. **Output Token Count** is relatively consistent (~500 tokens) across configurations but varies slightly by model capability.
+
+5. **Relative Cost** is then calculated as:
+   ```
+   Relative Cost = (Total API Cost of Configuration) ÷ (Total API Cost of GPT-4 + Accurate)
+   ```
+
+For example, GPT-3.5-turbo + Accurate costs approximately 25% of GPT-4 + Accurate because:
+- It processes similar input token counts (retrieval profile is the same)
+- The per-token cost for GPT-3.5-turbo is approximately 1/5 of GPT-4
+- Therefore: ($0.0005 × 6,000 + $0.0015 × 500) ÷ ($0.03 × 6,000 + $0.06 × 500) ≈ 0.25
+
+The **Cost-Performance Ratio** shows the numerical accuracy you get per unit of cost, helping identify the most cost-effective configurations. GPT-3.5-turbo with Fast retrieval provides the highest cost-performance ratio (3.67), indicating it delivers the most accuracy per dollar spent, despite its lower absolute accuracy.
 
 ## Insights and Recommendations
 
