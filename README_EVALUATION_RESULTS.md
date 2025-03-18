@@ -399,7 +399,7 @@ While our evaluation provides valuable insights into the performance of our Fina
 
 ### 1. Sample Size Constraints
 
-Due to cost considerations and computational resources, we tested with only 200 questions per configuration rather than the full ConvFinQA dataset. This limited sample may not fully represent the diversity of financial questions users might ask in production. A more comprehensive evaluation would involve thousands of questions across various financial domains.
+Due to cost considerations and computational resources, we tested with only 200 questions per configuration rather than the full ConvFinQA dataset. This limited sample may not fully represent the diversity of financial questions users might ask in production. A more comprehensive evaluation would involve thousands of questions across various financial domains in the ConvFinQA dataset.
 
 ### 2. Cost and Resource Limitations
 
