@@ -54,7 +54,7 @@ For zero ground truth values, we check if the absolute difference is less than 0
 
 ### Financial Accuracy
 
-This uses the same calculation as Numerical Accuracy but is tracked separately to highlight performance specifically on financial values. In our current implementation, the tolerance is the same (1%), but this allows us to adjust financial accuracy requirements independently in the future.
+This uses the same calculation as Numerical Accuracy but is tracked separately to highlight performance specifically on financial values. In our current implementation, the tolerance is set to (0.5%), but this allows us to adjust financial accuracy requirements independently in the future.
 
 ### Partial Numerical Match
 
